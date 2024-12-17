@@ -1,1 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blue Buzz Tic Tac Toe</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f0f8ff;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 0;
+        }
+        h1 {
+            margin: 0;
+        }
+        .game-container {
+            margin-top: 20px;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            grid-template-rows: repeat(3, 100px);
+            gap: 5px;
+            justify-content: center;
+        }
+        .cell {
+            width: 100px;
+            height: 100px;
+            background-color: #e3f2fd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            cursor: pointer;
+            border: 2px solid #90caf9;
+        }
+        .cell.taken {
+            pointer-events: none;
+        }
+        button {
+            margin: 20px;
+            padding: 10px 20px;
+            font-size: 1rem;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        footer {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #e3f2fd;
+        }
+        a {
+            color: #007BFF;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Blue Buzz Tic Tac Toe</h1>
+        <p>Enjoy a classic game of Tic Tac Toe!</p>
+    </header>
 
+    <div class="game-container">
+        <div id="game" class="grid"></div>
+        <button onclick="restartGame()">Restart Game</button>
+    </div>
+
+    <footer>
+        <p>
+            Download the source code for Blue Buzz Tic Tac Toe: 
+            <a href="tic-tac-toe.zip" download>Download Here</a>
+        </p>
+    </footer>
+
+    <script>
+        const gameContainer = document.getElementById("game");
+
+        let currentPlayer = "X";
+        let board = ["", "", "", "", "", "", "", "", ""];
+
+        function createBoard() {
+            gameContainer.innerHTML = "";
+            board.forEach((cell, index) => {
+                const cellElement = document.createElement("div");
+                cellElement.classList.add("cell");
+                cellElement.addEventListener("click", () => makeMove(index));
+                cellElement.textContent = cell;
+                gameContainer.appendChild(cellElement);
+            });
+        }
+
+        function makeMove(index) {
+            if (board[index] === "") {
+                board[index] = currentPlayer;
+                currentPlayer = currentPlayer === "X" ? "O" : "X";
+                checkWinner();
+                createBoard();
+            }
+        }
+
+        function checkWinner() {
+            const winPatterns = [
+                [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
+                [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columns
+                [0, 4, 8], [2, 4, 6] // Diagonals
+            ];
+
+            winPatterns.forEach(pattern => {
+                const [a, b, c] = pattern;
+                if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+                    alert(`${board[a]} wins!`);
+                    restartGame();
+                }
+            });
+
+            if (!board.includes("") && !board.includes(undefined)) {
+                alert("It's a draw!");
+                restartGame();
+            }
+        }
+
+        function restartGame() {
+            board = ["", "", "", "", "", "", "", "", ""];
+            currentPlayer = "X";
+            createBoard();
+        }
+
+        createBoard();
+    </script>
+</body>
+</html>
